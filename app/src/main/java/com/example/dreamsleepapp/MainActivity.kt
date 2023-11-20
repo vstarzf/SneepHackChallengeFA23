@@ -2,6 +2,7 @@ package com.example.dreamsleepapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -10,6 +11,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val bottomNavBar : BottomNavigationView = findViewById(R.id.bottomNavigationView)
+
+
 
         bottomNavBar.setOnItemSelectedListener {
             when (it.itemId) {

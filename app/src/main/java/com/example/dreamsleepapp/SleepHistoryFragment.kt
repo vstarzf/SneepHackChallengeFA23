@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,7 +19,8 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SleepHistoryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+    private lateinit var recyclerView: RecyclerView
+
     private var param1: String? = null
     private var param2: String? = null
 
@@ -27,6 +30,7 @@ class SleepHistoryFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(
@@ -34,7 +38,22 @@ class SleepHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sleep_history, container, false)
+        val view = inflater.inflate(R.layout.fragment_sleep_history, container, false)
+        recyclerView = view.findViewById(R.id.recyclerView)
+        recyclerView.setHasFixedSize(false)
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+
+        val tempDataSet = mutableListOf<Sleep>()
+
+        tempDataSet.add(0, Sleep(id = 4, hrs = 5, dream = "", rating = 3, date = "11/14/2023"))
+        tempDataSet.add(0, Sleep(id = 0, hrs = 6, dream = "", rating = 2, date = "11/15/2023"))
+        tempDataSet.add(0, Sleep(id = 6, hrs = 10, dream = "", rating = 5, date = "11/16/2023"))
+        tempDataSet.add(0, Sleep(id = 1, hrs = 2, dream = "", rating = 1, date = "11/17/2023"))
+        tempDataSet.add(0, Sleep(id = 2, hrs = 4, dream = "", rating = 2, date = "11/18/2023"))
+        tempDataSet.add(0, Sleep(id = 3, hrs = 8, dream = "", rating = 4, date = "11/19/2023"))
+
+        recyclerView.adapter = SleepAdapter(tempDataSet)
+        return view;
     }
 
     companion object {
