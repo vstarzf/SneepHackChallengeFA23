@@ -1,5 +1,7 @@
 package com.example.dreamsleepapp
 
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,8 +19,20 @@ class SleepAdapter (private val dataSet:List<Sleep>) : RecyclerView.Adapter<Slee
     }
 
     override fun onBindViewHolder(holder: SleepAdapter.ViewHolder, position: Int) {
+        val sleep = dataSet[position]
         holder.date.text = dataSet[position].date
         holder.hrsSlept.text = dataSet[position].hrs.toString()
+        holder.itemView.setOnClickListener {
+
+            val context = holder.itemView.context
+            val intent = Intent(context, EditDreamActivity::class.java)
+
+            intent.putExtra("sleep date", sleep.date)
+            intent.putExtra("sleep hours", sleep.hrs)
+
+            context.startActivity(intent)
+        }
+
 
     }
 

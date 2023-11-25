@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightPurple"
+    tools:context=".EditDreamActivity">
+
+    <TextView
+        android:id="@+id/enterHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="32dp"
+        android:paddingLeft="15dp"
+        android:paddingTop = "15dp"
+        android:textStyle="bold"
+        android:text="Enter Your Dream"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <EditText
+        android:id="@+id/editDreamText"
+        android:padding="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="10"
+        android:minLines="5"
+        android:textSize="15dp"
+        android:hint="Start typing your dream..."
+        app:layout_constraintTop_toBottomOf="@id/sleepDate"
+        app:layout_constraintStart_toStartOf="parent"
+        android:maxLines="15" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Save"
+        app:layout_constraintTop_toBottomOf="@id/editDreamText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/sleepDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/enterHeading"
+        app:layout_constraintStart_toStartOf="@id/enterHeading"
+        android:text="1/1/2023" />
+    <TextView
+        android:id="@+id/sleepHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:paddingLeft="15dp"
+        app:layout_constraintTop_toBottomOf="@id/enterHeading"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingRight="20dp"
+
+        android:text="9 hours" />
+</androidx.constraintlayout.widget.ConstraintLayout>
