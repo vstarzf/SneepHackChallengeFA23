@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,6 +44,8 @@ class SleepHistoryFragment : Fragment() {
         recyclerView.setHasFixedSize(false)
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 
+        val floatingButton : FloatingActionButton = view.findViewById(R.id.floatingActionButton)
+
         val tempDataSet = mutableListOf<Sleep>()
 
         tempDataSet.add(0, Sleep(id = 4, hrs = 5, dream = "", rating = 3, date = "11/14/2023"))
@@ -53,6 +56,10 @@ class SleepHistoryFragment : Fragment() {
         tempDataSet.add(0, Sleep(id = 3, hrs = 8, dream = "", rating = 4, date = "11/19/2023"))
 
         recyclerView.adapter = SleepAdapter(tempDataSet)
+
+        floatingButton.setOnClickListener {
+            parentFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, SleepLogFragment.newInstance(-1, "", -1)).commit()
+        }
         return view;
     }
 
