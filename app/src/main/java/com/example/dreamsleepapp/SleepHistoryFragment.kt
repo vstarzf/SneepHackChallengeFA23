@@ -1,6 +1,8 @@
 package com.example.dreamsleepapp
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import java.io.IOException
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +33,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class SleepHistoryFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
+    private lateinit var sleepList : List<Sleep>
 
     private var param1: String? = null
     private var param2: String? = null
@@ -46,21 +59,47 @@ class SleepHistoryFragment : Fragment() {
 
         val floatingButton : FloatingActionButton = view.findViewById(R.id.floatingActionButton)
 
-        val tempDataSet = mutableListOf<Sleep>()
+        sleepList = emptyList()
 
-        tempDataSet.add(0, Sleep(id = 4, hrs = 5, dream = "", rating = 3, date = "11/14/2023"))
-        tempDataSet.add(0, Sleep(id = 0, hrs = 6, dream = "", rating = 2, date = "11/15/2023"))
-        tempDataSet.add(0, Sleep(id = 6, hrs = 10, dream = "", rating = 5, date = "11/16/2023"))
-        tempDataSet.add(0, Sleep(id = 1, hrs = 2, dream = "", rating = 1, date = "11/17/2023"))
-        tempDataSet.add(0, Sleep(id = 2, hrs = 4, dream = "", rating = 2, date = "11/18/2023"))
-        tempDataSet.add(0, Sleep(id = 3, hrs = 8, dream = "", rating = 4, date = "11/19/2023"))
+        val client = OkHttpClient()
+        val request = Request.Builder().url("http://35.199.3.100/sleeps/").get().build()
 
-        recyclerView.adapter = SleepAdapter(tempDataSet)
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                activity?.runOnUiThread { Log.e(TAG, "failed", e)}
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val res = response.body?.string()
+                res.let {
+                    val list : List<Sleep>? = parseList(it)
+                    list?.let {
+                        activity?.runOnUiThread {
+                            val actualList = list.toMutableList()
+                            recyclerView.adapter = SleepAdapter(actualList)
+                        }
+                    }
+                }
+
+            }
+
+        })
 
         floatingButton.setOnClickListener {
             parentFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, SleepLogFragment.newInstance(-1, "", -1)).commit()
         }
         return view;
+    }
+
+    private fun parseList(listJson: String?) : List<Sleep>? {
+        return try {
+            val moshi : Moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+            val sleepListType = Types.newParameterizedType(List::class.java, Sleep::class.java)
+            val jsonAdapter : JsonAdapter<List<Sleep>> = moshi.adapter(sleepListType)
+            jsonAdapter.fromJson(listJson)
+        } catch (e: Exception) {
+            null
+        }
     }
 
     companion object {

@@ -1,9 +1,13 @@
 package com.example.dreamsleepapp
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class Sleep(
-    var id : Int,
-    var hrs : Int,
-    var dream : String,
-    var rating : Int,
-    var date : String
+    @Json(name = "id") var id : Int,
+    @Json(name = "hours_slept") var hrs : Int,
+    @Json(name = "dreams")var dream : String,
+    @Json(name="sleep_quality")var rating : Int,
+    @Json(name="date")var date : String
 )

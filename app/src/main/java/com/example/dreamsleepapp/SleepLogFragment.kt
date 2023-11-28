@@ -1,14 +1,23 @@
 package com.example.dreamsleepapp
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.RadioGroup
-import android.widget.TextView
+import androidx.fragment.app.Fragment
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
+import org.json.JSONObject
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,7 +64,29 @@ class SleepLogFragment : Fragment() {
 
 
         saveBtn.setOnClickListener {
-            //TODO: connect to backend & send api 'put' request
+            val client = OkHttpClient()
+
+            val sdf = SimpleDateFormat("dd/MM/yyyy")
+            val date: String = sdf.format(Date())
+
+            val jsonObject = JSONObject().apply {
+                put("hours_slept", hrsSlept)
+                put("sleep_quality", rating)
+                put("date", date)
+            }
+            val requestBody = jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
+            val putRequest = Request.Builder().url("http://35.199.3.100/sleeps/").post(requestBody).build()
+
+            client.newCall(putRequest).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val body = response.body
+                }
+
+            })
             parentFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, SleepHistoryFragment.newInstance("", "")).commit()
         }
 
