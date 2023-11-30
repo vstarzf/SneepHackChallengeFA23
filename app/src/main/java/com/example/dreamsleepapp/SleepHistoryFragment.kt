@@ -45,6 +45,7 @@ class SleepHistoryFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
+
     }
 
     override fun onCreateView(
@@ -62,7 +63,7 @@ class SleepHistoryFragment : Fragment() {
         sleepList = emptyList()
 
         val client = OkHttpClient()
-        val request = Request.Builder().url("http://35.199.3.100/sleeps/").get().build()
+        val request = Request.Builder().url("http://35.199.3.100/api/sleeps/").get().build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -71,22 +72,30 @@ class SleepHistoryFragment : Fragment() {
 
             override fun onResponse(call: Call, response: Response) {
                 val res = response.body?.string()
+                Log.d("sleep fragment response", "got sleeps from list")
                 res.let {
-                    val list : List<Sleep>? = parseList(it)
-                    list?.let {
-                        activity?.runOnUiThread {
-                            val actualList = list.toMutableList()
-                            recyclerView.adapter = SleepAdapter(actualList)
+                    activity?.runOnUiThread {
+                        val list : List<Sleep>? = parseList(it)
+
+                        list?.let {
+                            activity?.runOnUiThread {
+                                sleepList = list
+                                Log.d("sleep fragment response", sleepList.toString())
+                                recyclerView.adapter = SleepAdapter(sleepList)
+                            }
                         }
                     }
+
                 }
 
             }
 
         })
 
+
+
         floatingButton.setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, SleepLogFragment.newInstance(-1, "", -1)).commit()
+            parentFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, SleepLogFragment.newInstance(-1, "", -1, 2)).commit()
         }
         return view;
     }
@@ -98,6 +107,7 @@ class SleepHistoryFragment : Fragment() {
             val jsonAdapter : JsonAdapter<List<Sleep>> = moshi.adapter(sleepListType)
             jsonAdapter.fromJson(listJson)
         } catch (e: Exception) {
+           Log.d("sleep fragment response", e.message.toString());
             null
         }
     }

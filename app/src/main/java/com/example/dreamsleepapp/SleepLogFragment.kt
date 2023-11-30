@@ -1,6 +1,7 @@
 package com.example.dreamsleepapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ import java.util.Date
 private const val HRS_SLEPT = "hrsSlept"
 private const val DREAM = "dream"
 private const val RATING = "rating"
+private const val ID = "id"
 
 /**
  * A simple [Fragment] subclass.
@@ -34,6 +36,7 @@ class SleepLogFragment : Fragment() {
     private var hrsSlept: Int? = null
     private var dream: String? = null
     private var rating: Int? = null
+    private var id: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +44,7 @@ class SleepLogFragment : Fragment() {
             hrsSlept = it.getInt(HRS_SLEPT)
             dream = it.getString(DREAM)
             rating = it.getInt(RATING)
+            id = it.getInt(ID)
         }
     }
 
@@ -66,7 +70,7 @@ class SleepLogFragment : Fragment() {
         saveBtn.setOnClickListener {
             val client = OkHttpClient()
 
-            val sdf = SimpleDateFormat("dd/MM/yyyy")
+            val sdf = SimpleDateFormat("MM/dd/yyyy")
             val date: String = sdf.format(Date())
 
             val jsonObject = JSONObject().apply {
@@ -74,8 +78,19 @@ class SleepLogFragment : Fragment() {
                 put("sleep_quality", rating)
                 put("date", date)
             }
+
+            val hasDream = dreamText.text.toString().equals("")
+
+            val sleepObject = JSONObject().apply {
+                put("description", dreamText.text.toString())
+                put("has_description", hasDream)
+            }
+
             val requestBody = jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
-            val putRequest = Request.Builder().url("http://35.199.3.100/sleeps/").post(requestBody).build()
+            val sleepRequestBody = sleepObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
+            val putRequest = Request.Builder().url("http://35.199.3.100/api/sleeps/").post(requestBody).build()
+            val sleepPutRequest = Request.Builder().url("http://35.199.3.100/api/dreams/$id").post(sleepRequestBody).build()
+
 
             client.newCall(putRequest).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
@@ -83,7 +98,18 @@ class SleepLogFragment : Fragment() {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val body = response.body
+                    Log.d("sleep fragment response", "sent sleep put request")
+                }
+
+            })
+
+            client.newCall(sleepPutRequest).enqueue(object: Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    Log.d("sleep fragment response", "sent dream put request")
                 }
 
             })
@@ -105,12 +131,13 @@ class SleepLogFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(hrsSlept: Int, dream: String, rating: Int) =
+        fun newInstance(hrsSlept: Int, dream: String, rating: Int, id: Int) =
             SleepLogFragment().apply {
                 arguments = Bundle().apply {
                     putInt(HRS_SLEPT, hrsSlept)
                     putString(DREAM, dream)
                     putInt(RATING, rating)
+                    putInt(ID, id)
                 }
             }
     }
