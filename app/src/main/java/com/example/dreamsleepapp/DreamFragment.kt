@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Call
 import okhttp3.Callback
@@ -47,9 +48,11 @@ class DreamFragment : Fragment() {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_dream, container, false)
         val maxHrs : TextView = view.findViewById(R.id.mostWordsText)
+        val commonWords : TextView = view.findViewById(R.id.commonWordsText)
 
         val client = OkHttpClient()
         val request = Request.Builder().url("http://35.199.3.100/api/sleeps/best-hours-slept/").get().build()
+        val listrequest = Request.Builder().url("http://35.199.3.100/api/dreams/common-words/").get().build()
 
         client.newCall(request).enqueue(object: Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -70,6 +73,26 @@ class DreamFragment : Fragment() {
             }
 
         })
+
+        client.newCall(listrequest).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.d("sleep fragment response", "couldnt get list of common words")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val res = response.body?.string()
+                Log.d("sleep fragment response", "got list of common words")
+                res?.let {
+                    val list : List<String>? = parseList(it)
+                    list?.let {
+                        activity?.runOnUiThread {
+                            commonWords.text = list.toString()
+                        }
+                    }
+                }
+            }
+
+        })
         return view
     }
 
@@ -77,6 +100,18 @@ class DreamFragment : Fragment() {
         return try {
             val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
             val jsonAdapter : JsonAdapter<Int> = moshi.adapter(Int::class.java)
+            jsonAdapter.fromJson(json)
+        } catch (e: Exception) {
+            Log.d("sleep fragment response", e.message.toString())
+            null
+        }
+    }
+
+    private fun parseList (json: String?): List<String>? {
+        return try {
+            val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+            val strListType = Types.newParameterizedType(List::class.java, String::class.java)
+            val jsonAdapter : JsonAdapter<List<String>> = moshi.adapter(strListType)
             jsonAdapter.fromJson(json)
         } catch (e: Exception) {
             Log.d("sleep fragment response", e.message.toString())
