@@ -21,7 +21,6 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -58,6 +57,7 @@ class SleepHistoryFragment : Fragment() {
         recyclerView.setHasFixedSize(false)
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 
+
         val floatingButton : FloatingActionButton = view.findViewById(R.id.floatingActionButton)
 
         sleepList = emptyList()
@@ -82,6 +82,8 @@ class SleepHistoryFragment : Fragment() {
                                 sleepList = list
                                 Log.d("sleep fragment response", sleepList.toString())
                                 recyclerView.adapter = SleepAdapter(sleepList)
+                                Index.index = SleepAdapter(sleepList).itemCount
+
                             }
                         }
                     }
@@ -95,7 +97,7 @@ class SleepHistoryFragment : Fragment() {
 
 
         floatingButton.setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, SleepLogFragment.newInstance(-1, "", -1, 2)).commit()
+            parentFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, SleepLogFragment.newInstance(-1, "", -1, Index.index+1)).commit()
         }
         return view;
     }

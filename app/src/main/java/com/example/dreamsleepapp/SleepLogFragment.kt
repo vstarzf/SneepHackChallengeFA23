@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import okhttp3.Call
 import okhttp3.Callback
@@ -56,7 +57,19 @@ class SleepLogFragment : Fragment() {
         val view =  inflater.inflate(R.layout.fragment_sleep_log, container, false)
         val hrsTextView : EditText = view.findViewById(R.id.editTextNumber)
         val dreamText : EditText = view.findViewById(R.id.editDreamText)
-        //TODO: implement radio button stuff
+
+        val rating1 : RadioButton = view.findViewById(R.id.rating1Btn)
+        val rating2 : RadioButton = view.findViewById(R.id.rating2Btn)
+        val rating3 : RadioButton = view.findViewById(R.id.rating3Btn)
+        val rating4 : RadioButton = view.findViewById(R.id.rating4Btn)
+        val rating5 : RadioButton = view.findViewById(R.id.rating5Btn)
+
+        rating1.setOnClickListener { rating = 1 }
+        rating2.setOnClickListener { rating = 2 }
+        rating3.setOnClickListener { rating = 3 }
+        rating4.setOnClickListener { rating = 4 }
+        rating5.setOnClickListener { rating = 5 }
+
         val saveBtn : Button = view.findViewById(R.id.saveBtn)
 
         if(hrsSlept != null && hrsSlept != -1) {
@@ -74,7 +87,7 @@ class SleepLogFragment : Fragment() {
             val date: String = sdf.format(Date())
 
             val jsonObject = JSONObject().apply {
-                put("hours_slept", hrsSlept)
+                put("hours_slept", hrsTextView.text)
                 put("sleep_quality", rating)
                 put("date", date)
             }

@@ -65,46 +65,66 @@
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
+        android:layout_width="395dp"
+        android:layout_height="71dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textView4"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:layout_constraintVertical_bias="0.142">
 
         <RadioButton
             android:id="@+id/rating1Btn"
-            android:layout_width="wrap_content"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAlignment="center" />
+            android:button="@drawable/_372351__1_"
+            android:textAlignment="center"
+            android:textColor="#35173D"
+            android:textColorHighlight="#35173D"
+            android:textColorLink="#35173D" />
 
         <RadioButton
             android:id="@+id/rating2Btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@drawable/rating2__1_"
+            android:textColor="#4F2D36"
+            android:textColorHighlight="#4F2D36"
+            android:textColorLink="#4F2D36" />
 
         <RadioButton
             android:id="@+id/rating3Btn"
-            android:layout_width="wrap_content"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:button="@drawable/rating3"
+            android:textColorHighlight="#79552F"
+            android:textColorLink="#79552F" />
 
         <RadioButton
             android:id="@+id/rating4Btn"
-            android:layout_width="wrap_content"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:button="@drawable/rating4"
+            android:textColorHighlight="#A8812A"
+            android:textColorLink="#A8812A" />
 
         <RadioButton
             android:id="@+id/rating5Btn"
-            android:layout_width="wrap_content"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:button="@drawable/rating5"
+            android:buttonTint="#FACF32"
+            android:drawableTint="#FACF32"
+            android:foregroundTint="#FACF32"
+            android:textColor="#FACF32"
+            android:textColorHighlight="#FACF32" />
 
     </RadioGroup>
 
@@ -123,8 +143,8 @@
 
     <EditText
         android:id="@+id/editDreamText"
-        android:layout_width="334dp"
-        android:layout_height="257dp"
+        android:layout_width="338dp"
+        android:layout_height="200dp"
         android:layout_marginTop="8dp"
         android:background="@color/lightPurple"
         android:backgroundTint="#31884FC8"
