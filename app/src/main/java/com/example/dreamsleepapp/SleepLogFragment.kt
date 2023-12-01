@@ -64,6 +64,23 @@ class SleepLogFragment : Fragment() {
         val rating4 : RadioButton = view.findViewById(R.id.rating4Btn)
         val rating5 : RadioButton = view.findViewById(R.id.rating5Btn)
 
+        // Set the hours slept and dream text if they are not null
+        hrsSlept?.let {
+            if (it != -1) hrsTextView.setText(it.toString())
+        }
+        dream?.let {
+            if (it.isNotEmpty()) dreamText.setText(it)
+        }
+
+        // Set the appropriate radio button based on the rating
+        when (rating) {
+            1 -> rating1.isChecked = true
+            2 -> rating2.isChecked = true
+            3 -> rating3.isChecked = true
+            4 -> rating4.isChecked = true
+            5 -> rating5.isChecked = true
+        }
+
         rating1.setOnClickListener { rating = 1 }
         rating2.setOnClickListener { rating = 2 }
         rating3.setOnClickListener { rating = 3 }
@@ -78,6 +95,9 @@ class SleepLogFragment : Fragment() {
         if(dream != null && dream != "") {
             dreamText.setText(dream)
         }
+
+
+
 
 
         saveBtn.setOnClickListener {

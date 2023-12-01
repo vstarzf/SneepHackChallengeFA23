@@ -6,11 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
         val bottomNavBar : BottomNavigationView = findViewById(R.id.bottomNavigationView)
+
 
 
 
@@ -30,5 +33,19 @@ class MainActivity : AppCompatActivity() {
 
             true
         }
+    }
+    fun openDreamLogFragment(sleep: Sleep) {
+        val fragment = SleepLogFragment().apply {
+            arguments = Bundle().apply {
+                putString("hrsSlept", sleep.hrs)
+                putString("dream", sleep.dream)
+                putString("rating", sleep.rating)
+                putString("id", sleep.id)
+            }
+        }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainerView, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

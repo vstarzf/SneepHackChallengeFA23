@@ -31,11 +31,17 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SleepHistoryFragment : Fragment() {
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var sleepList : List<Sleep>
 
     private var param1: String? = null
     private var param2: String? = null
+
+    private var sleepDate: String? = null
+    private var hrsSlept: Int? = null
+    private var dream: String? = null
+    private var rating: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +49,7 @@ class SleepHistoryFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
 
 
     }
@@ -113,6 +120,10 @@ class SleepHistoryFragment : Fragment() {
             null
         }
     }
+
+
+
+
 
     companion object {
         /**

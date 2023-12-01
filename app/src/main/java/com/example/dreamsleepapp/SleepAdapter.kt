@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class SleepAdapter (private val dataSet:List<Sleep>) : RecyclerView.Adapter<SleepAdapter.ViewHolder>() {
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val date : TextView = view.findViewById(R.id.dateText)
         val hrsSlept : TextView = view.findViewById(R.id.hoursSlept)
@@ -18,19 +19,17 @@ class SleepAdapter (private val dataSet:List<Sleep>) : RecyclerView.Adapter<Slee
         return ViewHolder(view)
     }
 
+
     override fun onBindViewHolder(holder: SleepAdapter.ViewHolder, position: Int) {
         val sleep = dataSet[position]
         holder.date.text = dataSet[position].date
         holder.hrsSlept.text = dataSet[position].hrs.toString()
         holder.itemView.setOnClickListener {
-
             val context = holder.itemView.context
-            val intent = Intent(context, EditDreamActivity::class.java)
+            if (context is MainActivity) { // or YourFragment if it's used in a fragment
+                context.openDreamLogFragment(sleep)
+            }
 
-            intent.putExtra("sleep date", sleep.date)
-            intent.putExtra("sleep hours", sleep.hrs)
-
-            context.startActivity(intent)
         }
 
 
