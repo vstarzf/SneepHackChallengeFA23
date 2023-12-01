@@ -110,7 +110,8 @@ class SleepHistoryFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val id = viewHolder.adapterPosition
+                val index = viewHolder.adapterPosition
+                val id = sleepList.get(index).id.toInt()
 
                 val templist = sleepList.toMutableList()
                 templist.removeAt(viewHolder.adapterPosition)
