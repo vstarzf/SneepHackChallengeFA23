@@ -23,7 +23,6 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val HRS_SLEPT = "hrsSlept"
 private const val DREAM = "dream"
@@ -91,13 +90,6 @@ class SleepLogFragment : Fragment() {
         rating5.setOnClickListener { rating = 5 }
 
         val saveBtn : Button = view.findViewById(R.id.saveBtn)
-
-        if(hrsSlept != null && hrsSlept != -1) {
-            hrsTextView.setText(hrsSlept.toString())
-        }
-        if(dream != null && dream != "") {
-            dreamText.setText(dream)
-        }
 
         hrsTextView.doOnTextChanged { text, _, _, _ ->
             try {

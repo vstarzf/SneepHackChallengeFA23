@@ -38,6 +38,7 @@ class SleepAdapter (private val dataSet:List<Sleep>) : RecyclerView.Adapter<Slee
                 context.openDreamLogFragment(sleep)
             }
 
+
         }
 
 

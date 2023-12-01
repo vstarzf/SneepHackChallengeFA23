@@ -1,3 +1,5 @@
+
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -37,7 +39,9 @@ android {
 }
 
 dependencies {
-
+    implementation("com.github.ihsanbal:LoggingInterceptor:3.1.0") {
+        exclude(group = "org.json", module="json")
+    }
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")

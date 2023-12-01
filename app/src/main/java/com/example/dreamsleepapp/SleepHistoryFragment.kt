@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.ihsanbal.logging.Level
+import com.ihsanbal.logging.LoggingInterceptor
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -38,11 +40,6 @@ class SleepHistoryFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var sleepDate: String? = null
-    private var hrsSlept: Int? = null
-    private var dream: String? = null
-    private var rating: Int? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -70,6 +67,7 @@ class SleepHistoryFragment : Fragment() {
         sleepList = emptyList()
 
         val client = OkHttpClient()
+            client.newBuilder().addInterceptor(LoggingInterceptor.Builder().setLevel(Level.BASIC).build())
         val request = Request.Builder().url("http://35.199.3.100/api/sleeps/").get().build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -104,7 +102,7 @@ class SleepHistoryFragment : Fragment() {
 
 
         floatingButton.setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, SleepLogFragment.newInstance(-1, "", -1, Index.index+1)).commit()
+            parentFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, SleepLogFragment.newInstance( -1, "", 0,Index.index+1)).commit()
         }
         return view;
     }

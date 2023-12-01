@@ -37,10 +37,10 @@ class MainActivity : AppCompatActivity() {
     fun openDreamLogFragment(sleep: Sleep) {
         val fragment = SleepLogFragment().apply {
             arguments = Bundle().apply {
-                putString("hrsSlept", sleep.hrs)
+                putInt("hrsSlept", sleep.hrs.toInt())
                 putString("dream", sleep.dream)
-                putString("rating", sleep.rating)
-                putString("id", sleep.id)
+                putInt("rating", sleep.rating.toInt())
+                putInt("id", sleep.id.toInt())
             }
         }
         supportFragmentManager.beginTransaction()
