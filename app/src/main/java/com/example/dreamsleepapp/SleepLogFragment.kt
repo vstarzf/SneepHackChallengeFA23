@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.RadioButton
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import okhttp3.Call
 import okhttp3.Callback
@@ -55,6 +57,7 @@ class SleepLogFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_sleep_log, container, false)
+        val starRatingImage : ImageView = view.findViewById(R.id.starRatingImg)
         val hrsTextView : EditText = view.findViewById(R.id.editTextNumber)
         val dreamText : EditText = view.findViewById(R.id.editDreamText)
 
@@ -79,6 +82,17 @@ class SleepLogFragment : Fragment() {
             dreamText.setText(dream)
         }
 
+        hrsTextView.doOnTextChanged { text, _, _, _ ->
+            try {
+            if (text.toString().toInt() <= 4) {
+                starRatingImage.setImageResource(R.drawable.sadmoon)
+            } else {
+                starRatingImage.setImageResource(R.drawable.happymoon)
+            }} catch (_: Exception) {
+
+            }
+
+        }
 
         saveBtn.setOnClickListener {
             val client = OkHttpClient()

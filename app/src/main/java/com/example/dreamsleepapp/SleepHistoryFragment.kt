@@ -82,7 +82,7 @@ class SleepHistoryFragment : Fragment() {
                                 sleepList = list
                                 Log.d("sleep fragment response", sleepList.toString())
                                 recyclerView.adapter = SleepAdapter(sleepList)
-                                Index.index = SleepAdapter(sleepList).itemCount
+                                Index.index = list.size
 
                             }
                         }
