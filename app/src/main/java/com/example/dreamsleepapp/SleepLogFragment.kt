@@ -28,6 +28,7 @@ private const val HRS_SLEPT = "hrsSlept"
 private const val DREAM = "dream"
 private const val RATING = "rating"
 private const val ID = "id"
+private var isUpdate = false
 
 /**
  * A simple [Fragment] subclass.
@@ -68,7 +69,7 @@ class SleepLogFragment : Fragment() {
 
         // Set the hours slept and dream text if they are not null
         hrsSlept?.let {
-            if (it != -1) hrsTextView.setText(it.toString())
+            if (it != -1) hrsTextView.setText(it.toString()) else isUpdate = true
         }
         dream?.let {
             if (it.isNotEmpty()) dreamText.setText(it)
@@ -127,7 +128,10 @@ class SleepLogFragment : Fragment() {
 
             val requestBody = jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
             val sleepRequestBody = sleepObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
-            val putRequest = Request.Builder().url("http://35.199.3.100/api/sleeps/").post(requestBody).build()
+            var putRequest = Request.Builder().url("http://35.199.3.100/api/sleeps/").post(requestBody).build()
+            if(isUpdate) {
+                putRequest = Request.Builder().url("http://35.199.3.100/api/sleeps/$id").post(requestBody).build()
+            }
             val sleepPutRequest = Request.Builder().url("http://35.199.3.100/api/dreams/$id").post(sleepRequestBody).build()
 
 

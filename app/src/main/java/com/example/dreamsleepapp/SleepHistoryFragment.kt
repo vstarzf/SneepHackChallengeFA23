@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -67,7 +68,7 @@ class SleepHistoryFragment : Fragment() {
         sleepList = emptyList()
 
         val client = OkHttpClient()
-            client.newBuilder().addInterceptor(LoggingInterceptor.Builder().setLevel(Level.BASIC).build())
+        client.newBuilder().addInterceptor(LoggingInterceptor.Builder().setLevel(Level.BASIC).build())
         val request = Request.Builder().url("http://35.199.3.100/api/sleeps/").get().build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -99,7 +100,40 @@ class SleepHistoryFragment : Fragment() {
 
         })
 
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
 
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val id = viewHolder.adapterPosition
+
+                val templist = sleepList.toMutableList()
+                templist.removeAt(viewHolder.adapterPosition)
+                sleepList = templist
+
+                recyclerView.adapter?.notifyItemRemoved(viewHolder.adapterPosition)
+
+                val deleteRequest = Request.Builder().url("http://35.199.3.100/api/sleeps/$id/").delete().build()
+                client.newCall(deleteRequest).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        activity?.runOnUiThread { Log.e("sleep fragment response", "failed", e)}
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        val res = response.body?.string()
+                        Log.d("sleep fragment response", "deleted sleep")
+
+                    }
+
+                })
+            }
+
+        }).attachToRecyclerView(recyclerView)
 
         floatingButton.setOnClickListener {
             parentFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, SleepLogFragment.newInstance( -1, "", 0,Index.index+1)).commit()
